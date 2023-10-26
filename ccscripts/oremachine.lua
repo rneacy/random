@@ -45,13 +45,13 @@ local inventories = {
 
 while true do
     for _, inv in pairs(inventories) do
-        local inv_siz = inv.size()
-        local slots_taken = inv.list()
+        local inv_siz = inv.block.size()
+        local slots_taken = inv.block.list()
         local inv_contents = {}
 
         -- Determine what is in inventory now
         for i, slot in pairs(slots_taken) do
-            local stored_item = inv.getItemMeta(i)
+            local stored_item = inv.block.getItemMeta(i)
             local si_name = stored_item.rawName
             local si_count = stored_item.count
             inv_contents[si_name] = (inv_contents[si_name] or 0) + si_count
