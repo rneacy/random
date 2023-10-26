@@ -49,7 +49,7 @@ while true do
 
         -- Two stacks of a particular item allowed at one time
         for _, requirement in pairs(inv.requirements) do
-            if inv_contents[requirement] < 64 then
+            if not inv_contents[requirement] or inv_contents[requirement] < 64 then
                 local barrelName = requirement:gsub("%.", "_") -- so stinky
                 local barrel = barrels[barrelName]
 
@@ -76,5 +76,7 @@ while true do
                 end
             end
         end
+
+        os.sleep(1)
     end
 end
