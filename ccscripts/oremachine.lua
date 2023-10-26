@@ -15,9 +15,9 @@ local itemdefs = {
 
 -- Barrels
 local barrels = {
-    redstone = peripheral.wrap("yabba:item_barrel_0"),
-    cinnabar_ore = peripheral.wrap("yabba:item_barrel_1"),
-    cinnabar = peripheral.wrap("yabba:item_barrel_2"),
+    item_redstone = peripheral.wrap("yabba:item_barrel_0"),
+    tile_ore_cinnabar = peripheral.wrap("yabba:item_barrel_1"),
+    item_thermalfoundation_material_crystalCinnabar = peripheral.wrap("yabba:item_barrel_2"),
 }
 
 
@@ -27,17 +27,17 @@ local inventories = {
         name = "pyro crafter",
         block = peripheral.wrap("rftools:crafter1_0"),
         requirements = {
-            "redstone",
-            "blaze_rod",
-            "sulfur",
+            "item.redstone",
+            "item.blazeRod",
+            "item.thermalfoundation.material.dustSulfur",
         }
     },
     {
         name = "cryo crafter",
         block = peripheral.wrap("rftools:crafter1_1"),
         requirements = {
-            "redstone",
-            "snowball",
+            "item.redstone",
+            "item.snowball",
         }
     },
 }
@@ -58,9 +58,10 @@ while true do
         end
 
         -- Two stacks of a particular item allowed at one time
-        for _, requirement in inv.requirements do
-            if inv_contents[itemdefs[requirement]] < 64 then
-                local barrel = barrels[requirement]
+        for _, requirement in pairs(inv.requirements) do
+            if inv_contents[requirement] < 64 then
+                local barrelName = requirement:gsub("%.", "_") -- so stinky
+                local barrel = barrels[barrelName]
 
                 if barrel then
                     if not barrel.list() then
