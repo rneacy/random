@@ -65,28 +65,25 @@ while true do
                 if barrel then
                     if not barrel.list() then
                         print(requirement.." barrel is empty!")
-                        goto continue
-                    end
+                    else
+                        local block_name = peripheral.getName(inv.block)
 
-                    local block_name = peripheral.getName(inv.block)
+                        print("Pushing "..requirement.." to "..block_name)
 
-                    print("Pushing "..requirement.." to "..block_name)
+                        local times
+                        if requirement == "snowball" then times = 4 else times = 1 end
 
-                    local times
-                    if requirement == "snowball" then times = 4 else times = 1 end
-
-                    for i = 1, times do
-                        barrel.pushItems(
-                            block_name,
-                            BARREL_SLOT
-                        )
+                        for i = 1, times do
+                            barrel.pushItems(
+                                block_name,
+                                BARREL_SLOT
+                            )
+                        end
                     end
                 else
                     print("No barrel connected for "..requirement.."!")
                 end
             end
-
-            ::continue::
         end
     end
 end
