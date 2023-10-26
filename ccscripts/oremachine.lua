@@ -20,6 +20,12 @@ local inventories = {
             "item.redstone",
             "item.blazeRod",
             "item.thermalfoundation.material.dustSulfur",
+        },
+        delegates = {
+            item_blazeRod = {
+                name = "item.blazePowder",
+                amount_made = 4,
+            }
         }
     },
     {
@@ -49,20 +55,32 @@ while true do
 
         -- Two stacks of a particular item allowed at one time
         for _, requirement in pairs(inv.requirements) do
-            if not inv_contents[requirement] or inv_contents[requirement] < 64 then
-                local barrelName = requirement:gsub("%.", "_") -- so stinky
-                local barrel = barrels[barrelName]
+            local req_safe_name = requirement:gsub("%.", "_")
+            local og_requirement = requirement
+
+            -- If a requirement is actually made by something else
+            local delegate = inv.delegates[req_safe_name]
+            local divisor = 1
+            if delegate then
+                requirement = delegate.name
+                divisor = delegate.amount_made
+            end
+
+            local push_limit = 64 / divisor
+
+            if not inv_contents[requirement] or inv_contents[requirement] < push_limit then
+                local barrel = barrels[req_safe_name]
 
                 if barrel then
                     if not barrel.list() then
-                        print(requirement.." barrel is empty!")
+                        print(og_requirement.." barrel is empty!")
                     else
                         local block_name = peripheral.getName(inv.block)
 
-                        print("Pushing "..requirement.." to "..block_name)
+                        print("Pushing "..og_requirement.." to "..block_name)
 
                         local times
-                        if requirement == "snowball" then times = 4 else times = 1 end
+                        if og_requirement == "item.snowball" then times = 4 else times = 1 end
 
                         for i = 1, times do
                             barrel.pushItems(
@@ -72,7 +90,7 @@ while true do
                         end
                     end
                 else
-                    print("No barrel connected for "..requirement.."!")
+                    print("No barrel connected for "..og_requirement.."!")
                 end
             end
         end
