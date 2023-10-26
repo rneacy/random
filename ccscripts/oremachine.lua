@@ -2,16 +2,6 @@ rednet.open("back")
 
 BARREL_SLOT = 2
 
--- Mapping from nice name to internal name
-local itemdefs = {
-    redstone = "item.redstone",
-    cinnabar_ore = "tile.ore_cinnabar",
-    cinnabar = "item.thermalfoundation.material.crystalCinnabar",
-    blaze_road = "item.blazeRod",
-    snowball = "item.snowball",
-    sulfur = "item.thermalfoundation.material.dustSulfur",
-}
-
 
 -- Barrels
 local barrels = {
