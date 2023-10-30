@@ -2,6 +2,8 @@ rednet.open("back")
 
 BARREL_SLOT = 2
 
+PRINT_DEBUG = false
+
 
 -- Barrels
 local barrels = {
@@ -46,6 +48,17 @@ local inventories = {
         requirements = {
             item_thermalfoundation_material_crystalCinnabar = {
                 slot = 1,
+                require_empty = true,
+            }
+        },
+    },
+    {
+        name = "fluid transposer",
+        block = peripheral.wrap("thermalexpansion:machine_transposer_0"),
+        requirements = {
+            item_snowball = {
+                slot = 1,
+                require_empty = true,
             }
         },
     }
@@ -84,12 +97,18 @@ while true do
 
             local push_limit = 64 * multiplier
 
-            if not inv_contents[requirement] or inv_contents[requirement] < push_limit then
+            local do_push = options.require_empty and not inv_contents[requirement]
+
+            if not do_push then
+                do_push = not inv_contents[requirement] or inv_contents[requirement] < push_limit
+            end
+
+            if do_push then
                 local barrel = barrels[requirement]
 
                 if barrel then
-                    if not barrel.list() then
-                        print(og_requirement.." barrel is empty!")
+                    if #barrel.list() == 0 then
+                        if PRINT_DEBUG then print(og_requirement.." barrel is empty!") end
                     else
                         local block_name = peripheral.getName(inv.block)
 
@@ -108,7 +127,7 @@ while true do
                         end
                     end
                 else
-                    print("No barrel connected for "..og_requirement.."!")
+                    if PRINT_DEBUG then print("No barrel connected for "..og_requirement.."!") end
                 end
             end
         end
