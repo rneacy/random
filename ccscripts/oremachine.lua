@@ -115,17 +115,10 @@ while true do
             end
 
             if do_push then
-<<<<<<< HEAD
                 local barrel = barrels[og_requirement]
 
                 if barrel then
                     if not barrel.list()[BARREL_SLOT] then
-=======
-                local barrel = barrels[requirement]
-
-                if barrel then
-                    if #barrel.list() == 0 then
->>>>>>> 98397caee1b1c78c9a53e167b88af2ee918040f4
                         if PRINT_DEBUG then print(og_requirement.." barrel is empty!") end
                     else
                         local block_name = peripheral.getName(inv.block)
