@@ -62,6 +62,16 @@ local inventories = {
                 require_empty = true,
             }
         },
+    },
+    {
+        name = "fluid transposer (cinnabar ore)",
+        block = peripheral.wrap("thermalexpansion:machine_transposer_1"),
+        requirements = {
+            tile_ore_cinnabar = {
+                slot = 1,
+                require_empty = true,
+            }
+        },
     }
 }
 
