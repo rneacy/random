@@ -25,6 +25,7 @@ local barrels = {
     item_blazeRod = peripheral.wrap("yabba:item_barrel_3"),
     item_thermalfoundation_material_dustSulfur = peripheral.wrap("yabba:item_barrel_4"),
     item_snowball = peripheral.wrap("yabba:item_barrel_5"),
+    item_thermalfoundation_material_crystalSlagRich = peripheral.wrap("yabba:item_barrel_6")
 }
 
 
