@@ -4,6 +4,18 @@ BARREL_SLOT = 2
 
 PRINT_DEBUG = false
 
+local induction_smelter_requirement = {
+    item_thermalfoundation_material_crystalCinnabar = {
+        slot = 1,
+        require_empty = true,
+    },
+    item_thermalfoundation_material_crystalSlagRich = {
+        slot = 1,
+        require_empty = true,
+        if_no = "item_thermalfoundation_material_crystalCinnabar",
+    }
+}
+
 
 -- Barrels
 local barrels = {
@@ -45,12 +57,12 @@ local inventories = {
     {
         name = "induction smelter",
         block = peripheral.wrap("thermalexpansion:machine_smelter_0"),
-        requirements = {
-            item_thermalfoundation_material_crystalCinnabar = {
-                slot = 1,
-                require_empty = true,
-            }
-        },
+        requirements = induction_smelter_requirement,
+    },
+    {
+        name = "induction smelter 2",
+        block = peripheral.wrap("thermalexpansion:machine_smelter_1"),
+        requirements = induction_smelter_requirement,
     },
     {
         name = "fluid transposer",
@@ -100,45 +112,55 @@ while true do
             
             local multiplier = 1
 
-             -- If a requirement is actually made by something else
-            if options.delegate then
-                requirement = options.delegate.name
-                multiplier = options.delegate.amount_made / 2
+            local cancel = false
+
+            -- aka only proceed if we dont have any of this option
+            if options.if_no then
+                if inv_contents[options.if_no] then cancel = true end
+                if PRINT_DEBUG then print("Skipping "..requirement.." as "..options.if_no.." available.") end
             end
 
-            local push_limit = 64 * multiplier
+            if not cancel then
+                -- If a requirement is actually made by something else
+                if options.delegate then
+                    requirement = options.delegate.name
+                    multiplier = options.delegate.amount_made / 2
+                end
 
-            local do_push = options.require_empty and not inv_contents[requirement]
+                local push_limit = 64 * multiplier
 
-            if not do_push then
-                do_push = not inv_contents[requirement] or inv_contents[requirement] < push_limit
-            end
+                local do_push = options.require_empty and not inv_contents[requirement]
 
-            if do_push then
-                local barrel = barrels[og_requirement]
+                if not do_push then
+                    do_push = not inv_contents[requirement] or inv_contents[requirement] < push_limit
+                end
 
-                if barrel then
-                    if not barrel.list()[BARREL_SLOT] then
-                        if PRINT_DEBUG then print(og_requirement.." barrel is empty!") end
-                    else
-                        local block_name = peripheral.getName(inv.block)
+                if do_push then
+                    local barrel = barrels[og_requirement]
 
-                        print("Pushing "..og_requirement.." to "..block_name)
+                    if barrel then
+                        if not barrel.list()[BARREL_SLOT] then
+                            if PRINT_DEBUG then print(og_requirement.." barrel is empty!") end
+                        else
+                            local block_name = peripheral.getName(inv.block)
 
-                        local times = 1
-                        if options.push_times then times = options.push_times end
+                            print("Pushing "..og_requirement.." to "..block_name)
 
-                        for i = 1, times do
-                            barrel.pushItems(
-                                block_name,
-                                BARREL_SLOT,
-                                nil,
-                                options.slot
-                            )
+                            local times = 1
+                            if options.push_times then times = options.push_times end
+
+                            for i = 1, times do
+                                barrel.pushItems(
+                                    block_name,
+                                    BARREL_SLOT,
+                                    nil,
+                                    options.slot
+                                )
+                            end
                         end
+                    else
+                        if PRINT_DEBUG then print("No barrel connected for "..og_requirement.."!") end
                     end
-                else
-                    if PRINT_DEBUG then print("No barrel connected for "..og_requirement.."!") end
                 end
             end
         end
