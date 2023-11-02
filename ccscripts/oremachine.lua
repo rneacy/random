@@ -118,7 +118,7 @@ while true do
             -- aka only proceed if we dont have any of this option
             if options.if_no then
                 if inv_contents[options.if_no] then cancel = true end
-                if PRINT_DEBUG then print("Skipping "..requirement.." as "..options.if_no.." available.") end
+                if PRINT_DEBUG and cancel then print("Skipping "..requirement.." as "..options.if_no.." available.") end
             end
 
             if not cancel then
