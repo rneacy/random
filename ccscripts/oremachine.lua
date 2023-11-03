@@ -22,7 +22,7 @@ local barrels = {
     item_redstone = peripheral.wrap("yabba:item_barrel_0"),
     tile_ore_cinnabar = peripheral.wrap("yabba:item_barrel_1"),
     item_thermalfoundation_material_crystalCinnabar = peripheral.wrap("yabba:item_barrel_2"),
-    item_blazeRod = peripheral.wrap("yabba:item_barrel_3"),
+    item_blazePowder = peripheral.wrap("yabba:item_barrel_3"),
     item_thermalfoundation_material_dustSulfur = peripheral.wrap("yabba:item_barrel_4"),
     item_snowball = peripheral.wrap("yabba:item_barrel_5"),
     item_thermalfoundation_material_crystalSlagRich = peripheral.wrap("yabba:item_barrel_6")
@@ -36,12 +36,7 @@ local inventories = {
         block = peripheral.wrap("rftools:crafter1_0"),
         requirements = {
             item_redstone = {},
-            item_blazeRod = {
-                delegate = {
-                    name = "item_blazePowder",
-                    amount_made = 4,
-                },
-            },
+            item_blazePowder = {},
             item_thermalfoundation_material_dustSulfur = {},
         },
     },
