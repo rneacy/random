@@ -97,9 +97,11 @@ while true do
         -- Determine what is in inventory now
         for i, slot in pairs(slots_taken) do
             local stored_item = inv.block.getItemMeta(i)
-            local si_name = nameconv(stored_item.rawName)
-            local si_count = stored_item.count
-            inv_contents[si_name] = (inv_contents[si_name] or 0) + si_count
+            if stored_item then
+                local si_name = nameconv(stored_item.rawName)
+                local si_count = stored_item.count
+                inv_contents[si_name] = (inv_contents[si_name] or 0) + si_count
+            end
         end
 
         -- Two stacks of a particular item allowed at one time
